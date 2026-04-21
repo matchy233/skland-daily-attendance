@@ -13,6 +13,13 @@ services:
       # 最大重试次数 (可选，默认为 3)
       - SKLAND_MAX_RETRIES=${SKLAND_MAX_RETRIES:-3}
 
+      # 隐藏角色名配置 (可选)
+      - SKLAND_ANONYMOUS=${SKLAND_ANONYMOUS:-}
+      - SKLAND_NO_MASK=${SKLAND_NO_MASK:-}
+
+      # 跳过终末地签到 (可选)
+      - SKLAND_SKIP_ENDFIELD=${SKLAND_SKIP_ENDFIELD:-}
+
       # KV 存储配置 (可选)
       # - KV_REST_API_URL=${KV_REST_API_URL:-}
       # - KV_REST_API_TOKEN=${KV_REST_API_TOKEN:-}
