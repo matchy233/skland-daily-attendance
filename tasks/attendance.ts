@@ -62,14 +62,14 @@ async function processAccount(
   const hasAttended = await storage.getItem(attendanceKey)
 
   if (hasAttended) {
-    messageCollector.notify(`\n--- 账号 ${accountNumber}/${totalAccounts} ---`)
-    messageCollector.info(`今天已经签到过，跳过`)
+    messageCollector.log(`\n--- 账号 ${accountNumber}/${totalAccounts} ---`)
+    messageCollector.log(`今天已经签到过，跳过`)
     stats.accounts.skipped++
     return { accountHasError: false, charactersCount: 0 }
   }
 
-  messageCollector.notify(`\n--- 账号 ${accountNumber}/${totalAccounts} ---`)
-  messageCollector.info(`开始处理...`)
+  messageCollector.log(`\n--- 账号 ${accountNumber}/${totalAccounts} ---`)
+  messageCollector.log(`开始处理...`)
 
   const client = createClient()
   const { code } = await client.collections.hypergryph.grantAuthorizeCode(token)
@@ -169,7 +169,7 @@ export default defineTask<'success' | 'failed'>({
 
     const storage = useStorage()
 
-    messageCollector.notify('## 森空岛每日签到')
+    messageCollector.log('森空岛每日签到')
 
     const maxRetries = Number(config.maxRetries)
 
@@ -221,24 +221,24 @@ export default defineTask<'success' | 'failed'>({
     })
 
     // Output execution summary
-    messageCollector.notify(`\n========== 执行摘要 ==========`)
-    messageCollector.notify(`账号统计:`)
-    messageCollector.notify(`  • 总数: ${stats.accounts.total}`)
-    messageCollector.notify(`  • 成功: ${stats.accounts.successful}`)
-    messageCollector.notify(`  • 跳过: ${stats.accounts.skipped}`)
+    messageCollector.log(`\n========== 执行摘要 ==========`)
+    messageCollector.log(`账号统计:`)
+    messageCollector.log(`  • 总数: ${stats.accounts.total}`)
+    messageCollector.log(`  • 成功: ${stats.accounts.successful}`)
+    messageCollector.log(`  • 跳过: ${stats.accounts.skipped}`)
     if (stats.accounts.failed > 0) {
-      messageCollector.notifyError(`  • 失败: ${stats.accounts.failed} (账号 #${stats.accounts.failedIndexes.join(', #')})`)
+      messageCollector.error(`  • 失败: ${stats.accounts.failed} (账号 #${stats.accounts.failedIndexes.join(', #')})`)
     }
 
     // Output game-specific statistics
     if (stats.charactersByGame.size > 0) {
       for (const gameStats of stats.charactersByGame.values()) {
-        messageCollector.notify(`\n【${gameStats.gameName}】角色统计:`)
-        messageCollector.notify(`  • 总数: ${gameStats.total}`)
-        messageCollector.notify(`  • 本次签到成功: ${gameStats.succeeded}`)
-        messageCollector.notify(`  • 今天已签到: ${gameStats.alreadyAttended}`)
+        messageCollector.log(`\n【${gameStats.gameName}】角色统计:`)
+        messageCollector.log(`  • 总数: ${gameStats.total}`)
+        messageCollector.log(`  • 本次签到成功: ${gameStats.succeeded}`)
+        messageCollector.log(`  • 今天已签到: ${gameStats.alreadyAttended}`)
         if (gameStats.failed > 0) {
-          messageCollector.notifyError(`  • 签到失败: ${gameStats.failed}`)
+          messageCollector.error(`  • 签到失败: ${gameStats.failed}`)
         }
       }
     }
