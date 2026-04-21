@@ -12,12 +12,16 @@ on:
         required: false
       SKLAND_ANONYMOUS:
         required: false
+      SKLAND_SKIP_ENDFIELD:
+        required: false
+      SKLAND_NO_MASK:
+        required: false
       MAX_RETRIES:
         required: false
     inputs:
       repository:
         description: The repository to run the workflow on
-        default: enpitsuLin/skland-daily-attendance
+        default: matchy233/skland-daily-attendance
         required: false
         type: string
 
@@ -52,3 +56,5 @@ jobs:
           SKLAND_NOTIFICATION_URLS: ${{ secrets.SKLAND_NOTIFICATION_URLS }}
           SKLAND_MAX_RETRIES: ${{ secrets.MAX_RETRIES }}
           SKLAND_ANONYMOUS: ${{ secrets.SKLAND_ANONYMOUS }}
+          SKLAND_SKIP_ENDFIELD: ${{ secrets.SKLAND_SKIP_ENDFIELD }}
+          SKLAND_NO_MASK: ${{ secrets.SKLAND_NO_MASK }}
