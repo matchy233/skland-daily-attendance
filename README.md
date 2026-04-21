@@ -44,6 +44,7 @@
    |------------|------|---------|
    | `SKLAND_TOKENS` | 森空岛凭据，多个账号用逗号分隔 | 必填 |
    | `SKLAND_NOTIFICATION_URLS` | 通知 URL，多个 URL 用逗号分隔 | 可选 |
+   | `SKLAND_SKIP_ENDFIELD` | 跳过终末地签到（设置任意值即可启用） | 可选 |
    | `SKLAND_MAX_RETRIES` | 最大重试次数，默认为 3 | 可选 |
    | `SKLAND_ANONYMOUS` | 隐藏角色名，设置任意值即可开启（推荐使用 `true` 或 `1`），默认关闭 | 可选 |
 
@@ -136,6 +137,9 @@ SKLAND_MAX_RETRIES=3
 
 # 可选：隐藏角色名（设置任意值即可开启，推荐使用 true 或 1）
 SKLAND_ANONYMOUS=true
+
+# 可选：跳过终末地签到（设置任意值即可启用）
+# SKLAND_SKIP_ENDFIELD=true
 
 # 可选：持久化存储配置（使用 Upstash Redis）
 # KV_REST_API_URL=https://your-upstash-redis.upstash.io
@@ -310,6 +314,14 @@ SKLAND_MAX_RETRIES=5
 
 ```bash
 SKLAND_ANONYMOUS=true
+```
+
+#### 跳过终末地签到
+
+如果没有终末地账号或不希望签到终末地，可以设置：
+
+```bash
+SKLAND_SKIP_ENDFIELD=true
 ```
 
 ## 注意事项

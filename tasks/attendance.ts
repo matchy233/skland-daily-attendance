@@ -38,6 +38,7 @@ interface AttendanceContext {
   storage: Storage
   maxRetries: number
   totalAccounts: number
+  appCodes: string[]
 }
 
 // Create attendance context instance
@@ -49,14 +50,14 @@ const attendanceContext = createContext<AttendanceContext>({
 // Export composable function for accessing context
 const useAttendanceContext = attendanceContext.use
 
-const ATTENDANCE_AVAILABLE_APPCODE = ['arknights', 'endfield']
+const DEFAULT_APPCODES = ['arknights', 'endfield']
 
 async function processAccount(
   token: string,
   accountNumber: number,
 ): Promise<ProcessAccountResult> {
   // Get all dependencies from context
-  const { stats, messageCollector, storage, maxRetries, totalAccounts } = useAttendanceContext()
+  const { stats, messageCollector, storage, maxRetries, totalAccounts, appCodes } = useAttendanceContext()
   // Check if already attended today
   const attendanceKey = await generateAttendanceKey(token)
   const hasAttended = await storage.getItem(attendanceKey)
@@ -78,7 +79,7 @@ async function processAccount(
   const { list } = await client.collections.player.getBinding()
   // Build character list with game information preserved
   const characterList = list
-    .filter(i => ATTENDANCE_AVAILABLE_APPCODE.includes(i.appCode))
+    .filter(i => appCodes.includes(i.appCode))
     .flatMap((binding) => {
       if (binding.appCode === 'endfield') {
         // 终末地按单个角色展开，与明日方舟不同，每个 role 需要独立签到
@@ -172,6 +173,10 @@ export default defineTask<'success' | 'failed'>({
     messageCollector.log('森空岛每日签到')
 
     const maxRetries = Number(config.maxRetries)
+    const skipEndfield = !!config.skipEndfield
+    const appCodes = skipEndfield
+      ? DEFAULT_APPCODES.filter(code => code !== 'endfield')
+      : DEFAULT_APPCODES
 
     // Initialize statistics
     const stats: ExecutionStats = {
@@ -193,6 +198,7 @@ export default defineTask<'success' | 'failed'>({
       storage,
       maxRetries,
       totalAccounts: tokens.length,
+      appCodes,
     }
 
     // Create context scope for async operations
