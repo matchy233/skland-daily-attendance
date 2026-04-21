@@ -13,6 +13,7 @@ export default defineConfig({
     notificationUrls: '',
     maxRetries: '3',
     skipEndfield: '',
+    noMask: '',
     nitro: {
       envPrefix: 'SKLAND_',
     },

@@ -1,4 +1,5 @@
 import type { AppBindingPlayer } from 'skland-kit'
+import { isEnvEnabled } from './env'
 
 /**
  * Format game name from appCode
@@ -18,11 +19,17 @@ export function formatCharacterName(character: AppBindingPlayer, appName?: strin
 
 export function formatPrivacyName(character: AppBindingPlayer) {
   // eslint-disable-next-line node/prefer-global/process
-  const isMinimalPrivacy = !!process.env.SKLAND_ANONYMOUS
+  const isMinimalPrivacy = isEnvEnabled(process.env.SKLAND_ANONYMOUS)
+  const isNoMask = isEnvEnabled(process.env.SKLAND_NO_MASK)
 
   // 终末地的昵称在 defaultRole 里取
   if (character.gameId === 3) {
-    const nickname = isMinimalPrivacy ? '管理员' : maskNickname(character.defaultRole?.nickname || '')
+    const rawNickname = character.defaultRole?.nickname || ''
+    const nickname = isMinimalPrivacy
+      ? '管理员'
+      : rawNickname
+        ? (isNoMask ? rawNickname : maskNickname(rawNickname))
+        : '管理员'
     return `${nickname} lv.${character.defaultRole?.level || 0}`
   }
 
@@ -31,7 +38,9 @@ export function formatPrivacyName(character: AppBindingPlayer) {
   if (!name)
     throw new Error('Unexpected Error: 明日方舟 nickName 格式不正确')
 
-  const displayName = isMinimalPrivacy ? '博士 ' : maskNickname(name)
+  const displayName = isMinimalPrivacy
+    ? '博士 '
+    : (isNoMask ? name : maskNickname(name))
   return `${displayName}#${number}`
 }
 

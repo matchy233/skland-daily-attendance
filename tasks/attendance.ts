@@ -6,7 +6,7 @@ import { useStorage } from 'nitro/storage'
 import { defineTask } from 'nitro/task'
 import { createClient } from 'skland-kit'
 import { createContext } from 'unctx'
-import { attendCharacter, createMessageCollector, generateAttendanceKey, getSplitByComma } from '~/utils/index'
+import { attendCharacter, createMessageCollector, generateAttendanceKey, getSplitByComma, isEnvEnabled } from '~/utils/index'
 
 interface GameStats {
   gameName: string
@@ -173,7 +173,7 @@ export default defineTask<'success' | 'failed'>({
     messageCollector.log('森空岛每日签到')
 
     const maxRetries = Number(config.maxRetries)
-    const skipEndfield = !!config.skipEndfield
+    const skipEndfield = isEnvEnabled(config.skipEndfield)
     const appCodes = skipEndfield
       ? DEFAULT_APPCODES.filter(code => code !== 'endfield')
       : DEFAULT_APPCODES
