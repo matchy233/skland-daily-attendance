@@ -23,6 +23,7 @@ FROM node:24-alpine
 
 # Set non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN apk add --no-cache su-exec
 
 WORKDIR /app
 
@@ -38,8 +39,10 @@ EXPOSE 3000
 # Set environment variables
 ENV NODE_ENV=production
 
-# Switch to non-root user
-USER appuser
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Start the application
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["node", ".output/server/index.mjs"]
