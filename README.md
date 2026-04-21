@@ -136,14 +136,16 @@ SKLAND_NOTIFICATION_URLS=your-notification-url
 # 可选：最大重试次数（默认为 3）
 SKLAND_MAX_RETRIES=3
 
-# 可选：隐藏角色名（设置任意值即可开启，推荐使用 true 或 1）
-SKLAND_ANONYMOUS=true
+# ===== 角色名显示设置 (可选) =====
 
-# 可选：跳过终末地签到（设置任意值即可启用；false/0/off/no 关闭）
-# SKLAND_SKIP_ENDFIELD=true
+# 可选：隐藏角色名（设置任意值即可启用；false/0/off/no 关闭）
+SKLAND_ANONYMOUS=true
 
 # 可选：关闭昵称打码（设置任意值即可启用；false/0/off/no 关闭）
 # SKLAND_NO_MASK=true
+
+# 可选：跳过终末地签到（设置任意值即可启用；false/0/off/no 关闭）
+# SKLAND_SKIP_ENDFIELD=true
 
 # 可选：持久化存储配置（使用 Upstash Redis）
 # KV_REST_API_URL=https://your-upstash-redis.upstash.io
