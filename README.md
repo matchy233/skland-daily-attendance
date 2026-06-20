@@ -121,7 +121,10 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/app/.data
+      - skland_data:/app/.data
+
+volumes:
+  skland_data:
 ```
 
 2. 创建 `.env` 文件并配置环境变量：
@@ -202,13 +205,13 @@ docker run -d \
   --restart unless-stopped \
   -e SKLAND_TOKENS="your-token-1,your-token-2" \
   -e SKLAND_NOTIFICATION_URLS="your-notification-url" \
-  -v $(pwd)/data:/app/.data \
+  -v skland_data:/app/.data \
   skland-attendance
 ```
 
 #### Docker 部署注意事项
 
-- 默认使用本地文件存储，数据会持久化到 `./data` 目录
+- 默认使用本地文件存储，数据会持久化到 `skland_data` 数据卷
 - 如果需要使用 Redis 持久化，可以取消注释 `docker-compose.yml` 中的 Redis 服务配置
 - 容器在启动时会自动执行一次签到任务，随后按照 `nitro.config.ts` 中配置的定时任务自动执行（默认每天 8:00 和 20:00 各执行一次）
 - 如需调整定时任务频率，请修改 `nitro.config.ts` 中的 `scheduledTasks` 配置后重新构建镜像
