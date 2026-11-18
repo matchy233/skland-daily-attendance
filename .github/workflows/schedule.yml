@@ -16,6 +16,8 @@ on:
         required: false
       SKLAND_NO_MASK:
         required: false
+      SKLAND_MAX_RETRIES:
+        required: false
       MAX_RETRIES:
         required: false
     inputs:
@@ -43,7 +45,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.13.0
-          cache: 'pnpm'
+          cache: pnpm
           cache-dependency-path: '**/pnpm-lock.yaml'
 
       - name: Install dependencies
@@ -54,7 +56,15 @@ jobs:
         env:
           SKLAND_TOKENS: ${{ secrets.SKLAND_TOKENS }}
           SKLAND_NOTIFICATION_URLS: ${{ secrets.SKLAND_NOTIFICATION_URLS }}
-          SKLAND_MAX_RETRIES: ${{ secrets.MAX_RETRIES }}
+          SKLAND_MAX_RETRIES: ${{ secrets.SKLAND_MAX_RETRIES || secrets.MAX_RETRIES }}
           SKLAND_ANONYMOUS: ${{ secrets.SKLAND_ANONYMOUS }}
           SKLAND_SKIP_ENDFIELD: ${{ secrets.SKLAND_SKIP_ENDFIELD }}
           SKLAND_NO_MASK: ${{ secrets.SKLAND_NO_MASK }}
+
+  workflow-keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: liskin/gh-workflow-keepalive@v1
